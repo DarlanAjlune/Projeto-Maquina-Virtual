@@ -27,12 +27,40 @@ REGISTRADORES
     
 """
 from random import randint
+import numpy as np
 
 # DICIONÁRIO COM TODOS OS OPCODES DISPONÍVEIS
-OPCODE = {'commandE':0, 'commandOU':1, 'commandSUM':2, 'commandSUB':3, 'commandSUMC':4, 'commandSUBC':5 }
+OPCODE = {'commandE':'000', 'commandOU':'001', 'commandSUM':'010', 'commandSUB':'011', 'commandSUMC':'100', 'commandSUBC':'101'}
 # DICIONÁRIO QUE IRÁ SALVAR TODOS OS REGISTRADORES DISPONÍVEIS 
 REGISTER = {}
     
+def mostrarRegistradoresInstrucao(instrucaoEmPartes):
+    '''
+    ESTA FUNÇÃO É USADA PARA MOSTRAR OS REGISTRADORES DAQUELA INSTRUÇÃO E SEUS RESPECTIVOS VALORES
+    -------
+    Parameters
+    ----------
+    instrucaoEmPartes : LIST DE STR
+        É UMA LISTA QUE SALVA SEPARADAMENTE UMA INTRUÇÃO, OU SEJA:
+            POSIÇÃO 0: RT (REGISTRADOR ORIGEM 2) OU CONST (CONSTANTE), VAI DEPENDER DO TIPO DA INSTRUÇÃO, SE É R OU I 
+            POSIÇÃO 1: RS (REGISTRADOR ORIGEM 1)
+            POSIÇÃO 2: RD (REGISTRADOR DESTINO)
+            POSIÇÃO 3: OPCODE (QUAL OPERAÇÃO SERÁ EXECUTADA)
+    Returns
+    -------
+    None.
+    
+    '''
+    
+    if int(instrucaoEmPartes[3],2) < 4:
+        print(instrucaoEmPartes[2], '=', REGISTER[ int(instrucaoEmPartes[2],2) ])
+        print(instrucaoEmPartes[1], '=', REGISTER[ int(instrucaoEmPartes[1],2) ])
+        print(instrucaoEmPartes[0], '=', REGISTER[ int(instrucaoEmPartes[0],2) ])
+    else:
+        print(instrucaoEmPartes[2], '=' , REGISTER[ int(instrucaoEmPartes[2],2) ])
+        print(instrucaoEmPartes[1], '=', REGISTER[ int(instrucaoEmPartes[1],2) ])
+        print('CONST =', int(instrucaoEmPartes[0],2))
+
 def executandoInstrucao(instrucaoEmPartes):
     '''
     ESTA FUNÇÃO IRÁ EXECUTAR A INSTRUÇÃO DESEJA, PODENDO SER & | + -
@@ -56,50 +84,23 @@ def executandoInstrucao(instrucaoEmPartes):
     print('\nREGISTRADORES ANTES')
     mostrarRegistradoresInstrucao(instrucaoEmPartes)
     
-    if OPCODE[instrucaoEmPartes[3]] == 0:
-        REGISTER[ instrucaoEmPartes[2] ] = REGISTER[ instrucaoEmPartes[1] ] & REGISTER[ instrucaoEmPartes[0] ] 
-    elif OPCODE[instrucaoEmPartes[3]] == 1:
+    if int(instrucaoEmPartes[3],2) == 0:
+        REGISTER[ int(instrucaoEmPartes[2],2) ] = REGISTER[ int(instrucaoEmPartes[1],2) ] & REGISTER[ int(instrucaoEmPartes[0],2) ] 
+    elif int(instrucaoEmPartes[3],2) == 1:
         REGISTER[ instrucaoEmPartes[2] ] = REGISTER[ instrucaoEmPartes[1] ] | REGISTER[ instrucaoEmPartes[0] ]
-    elif OPCODE[instrucaoEmPartes[3]] == 2:
-        REGISTER[ instrucaoEmPartes[2] ] = REGISTER[ instrucaoEmPartes[1] ] + REGISTER[ instrucaoEmPartes[0] ]
-    elif OPCODE[instrucaoEmPartes[3]] == 3:
-        REGISTER[ instrucaoEmPartes[2] ] = REGISTER[ instrucaoEmPartes[1] ] - REGISTER[ instrucaoEmPartes[0] ]
-    elif OPCODE[instrucaoEmPartes[3]] == 4:
-        REGISTER[ instrucaoEmPartes[2] ] = REGISTER[ instrucaoEmPartes[1] ] + int(instrucaoEmPartes[0])
-    elif OPCODE[instrucaoEmPartes[3]] == 5:
-        REGISTER[ instrucaoEmPartes[2] ] = REGISTER[ instrucaoEmPartes[1] ] - int(instrucaoEmPartes[0])
+    elif int(instrucaoEmPartes[3],2) == 2:
+        REGISTER[ int(instrucaoEmPartes[2],2) ] = REGISTER[ int(instrucaoEmPartes[1],2) ] + REGISTER[ int(instrucaoEmPartes[0],2) ]
+    elif int(instrucaoEmPartes[3],2) == 3:
+        REGISTER[ int(instrucaoEmPartes[2],2) ] = REGISTER[ int(instrucaoEmPartes[1],2) ] - REGISTER[ int(instrucaoEmPartes[0],2) ]
+    elif int(instrucaoEmPartes[3],2) == 4:
+        REGISTER[ int(instrucaoEmPartes[2],2) ] = REGISTER[ int(instrucaoEmPartes[1],2) ] + int(instrucaoEmPartes[0],2)
+    elif int(instrucaoEmPartes[3],2) == 5:
+        REGISTER[ int(instrucaoEmPartes[2],2) ] = REGISTER[ int(instrucaoEmPartes[1],2) ] - int(instrucaoEmPartes[0],2)
     
     print('\nREGISTRADORES DEPOIS')
     mostrarRegistradoresInstrucao(instrucaoEmPartes)
     print('*******************************************************')   
     
-def mostrarRegistradoresInstrucao(instrucaoEmPartes):
-    '''
-    ESTA FUNÇÃO É USADA PARA MOSTRAR OS REGISTRADORES DAQUELA INSTRUÇÃO E SEUS RESPECTIVOS VALORES
-    -------
-    Parameters
-    ----------
-    instrucaoEmPartes : LIST DE STR
-        É UMA LISTA QUE SALVA SEPARADAMENTE UMA INTRUÇÃO, OU SEJA:
-            POSIÇÃO 0: RT (REGISTRADOR ORIGEM 2) OU CONST (CONSTANTE), VAI DEPENDER DO TIPO DA INSTRUÇÃO, SE É R OU I 
-            POSIÇÃO 1: RS (REGISTRADOR ORIGEM 1)
-            POSIÇÃO 2: RD (REGISTRADOR DESTINO)
-            POSIÇÃO 3: OPCODE (QUAL OPERAÇÃO SERÁ EXECUTADA)
-    Returns
-    -------
-    None.
-    
-    '''
-    
-    if OPCODE[instrucaoEmPartes[3]] < 4:
-        print(instrucaoEmPartes[2], '=', REGISTER[ instrucaoEmPartes[2] ])
-        print(instrucaoEmPartes[1], '=', REGISTER[ instrucaoEmPartes[1] ])
-        print(instrucaoEmPartes[0], '=', REGISTER[ instrucaoEmPartes[0] ])
-    else:
-        print(instrucaoEmPartes[2], '=' , REGISTER[ instrucaoEmPartes[2] ])
-        print(instrucaoEmPartes[1], '=', REGISTER[ instrucaoEmPartes[1] ])
-        print('CONST =', instrucaoEmPartes[0])
-
 def mostraRegistradores():
     '''
     ESTÁ FUNÇÃO IRÁ MOSTRAR TODOS OS REGISTRADORES E SEUS RESPECTIVOS VALORES
@@ -111,9 +112,8 @@ def mostraRegistradores():
     '''
     
     for i in range(10):
-        print(chr(ord('A')+i),'=', REGISTER[chr(ord('A')+i)])
-        
-# RETORNA A INSTRUÇÃO A SER EXECUTADA    
+        print(chr(ord('A')+i),'=', REGISTER[i])
+
 def fetch(INSTRUCOES, PC):
     '''
     Parameters
@@ -147,68 +147,10 @@ def inicializacaoRegistradores():
     '''
     print('INICIALIZANDO OS REGISTRADORES')
     for i in range(10):
-        REGISTER[chr(ord('A')+i)] = randint(0, 2**9-1)
+        REGISTER[i] = randint(0, 2**9-1)
     
     mostraRegistradores()
     print('*******************************************************')
-    
-def ehDigito(x):
-    '''
-    Parameters
-    ----------
-    x : STR
-        X É O RT OU CONST.
-
-    Returns
-    -------
-    BOOLEANO
-        RETORNA TRUE SE X FOR UM DÍGITO OU FALSE CASO CONTRÁRIO.
-    '''
-    if x[0] == '-':
-        aux = x.split('-')
-        if len(aux) != 2:
-            return False
-        else:
-            return (aux[1].isdigit())
-    else: 
-        return x.isdigit()
-    
-def validaInstrucao(instrucaoEmPartes):
-    '''
-    Parameters
-    ----------
-    instrucaoEmPartes : LIST DE STR
-        É UMA LISTA QUE SALVA SEPARADAMENTE UMA INTRUÇÃO, OU SEJA:
-            POSIÇÃO 0: RT (REGISTRADOR ORIGEM 2) OU CONST (CONSTANTE), VAI DEPENDER DO TIPO DA INSTRUÇÃO, SE É R OU I 
-            POSIÇÃO 1: RS (REGISTRADOR ORIGEM 1)
-            POSIÇÃO 2: RD (REGISTRADOR DESTINO)
-            POSIÇÃO 3: OPCODE (QUAL OPERAÇÃO SERÁ EXECUTADA)
-    
-    Returns
-    -------
-    BOOLEANO
-        RETORNA TRUE SE A INSTRUÇÃO FOR VÁLIDA OU FALSE CASO CONTRÁRIO.
-
-    '''
-    if len(instrucaoEmPartes) != 4:
-        print('INSTRUÇÃO INVÁLIDO', *instrucaoEmPartes)
-        return False
-    else:
-        if OPCODE.get(instrucaoEmPartes[3]) == None:
-            print('OPCODE INVÁLIDO', instrucaoEmPartes[3])
-            return False
-        
-        if 4 <= OPCODE[instrucaoEmPartes[3]] <= 5 and not(ehDigito(instrucaoEmPartes[0])):
-            print('CONSTANTE INVÁLIDA', instrucaoEmPartes[0])
-            return False
-        
-        for i in range(3):
-            if REGISTER.get(instrucaoEmPartes[i]) == None and not( 4 <= OPCODE[instrucaoEmPartes[3]] <= 5):
-                print('REGISTRADOR INVÁLIDO', instrucaoEmPartes[i])
-                return False
-    
-    return True    
-        
 
 def decodificacaoInstrucao(instrucaoVouExecutar):
     '''
@@ -223,9 +165,46 @@ def decodificacaoInstrucao(instrucaoVouExecutar):
         RETORNA A INSTRUÇÃO DECODIFICADA, OU SEJA, SEPARANDO O OPCODE, OS REGISTRADORES E A CONSTANTE, CASO EXISTIR.
 
     '''
-    instrucaoEmPartes = instrucaoVouExecutar.split()
     global flag
-    flag = validaInstrucao(instrucaoEmPartes)
+    flag = True
+
+    instrucaoEmPartes = instrucaoVouExecutar.split()
+    instrucaoEmPartes[1] = np.binary_repr(ord(instrucaoEmPartes[1])-65, 9)
+    instrucaoEmPartes[2] = np.binary_repr(ord(instrucaoEmPartes[2])-65, 9)
+    instrucaoEmPartes[3] = OPCODE[instrucaoEmPartes[3]]
+    
+    if 4 <= int(instrucaoEmPartes[3], 2) <= 5:
+        try:
+            instrucaoEmPartes[0] = np.binary_repr(int(instrucaoEmPartes[0]), 11)    
+        except ValueError:
+            print('CONSTANTE INVÁLIDA', instrucaoEmPartes[0])
+            flag = False
+            return []  
+    else:
+        try:
+            instrucaoEmPartes[0] = np.binary_repr(ord(instrucaoEmPartes[0])-65, 11)
+        except TypeError:
+            print('REGISTRADOR INVÁLIDA', instrucaoEmPartes[0])
+            flag = False
+            return []
+
+    if len(instrucaoEmPartes) != 4:
+        print('INSTRUÇÃO INVÁLIDO', *instrucaoEmPartes)
+        flag = False
+        return []
+    else:
+        if not(0 <= int(instrucaoEmPartes[3],2) <= 5):
+            print('OPCODE INVÁLIDO', instrucaoEmPartes[3])
+            flag = False
+            return []
+        else:
+            for i in range(3):
+                if not(4 <= int(instrucaoEmPartes[3], 2) <= 5 and i == 0) and not(0 <= int(instrucaoEmPartes[i], 2) <= 9):
+                    print('REGISTRADOR INVÁLIDO', instrucaoEmPartes[i])
+                    flag = False
+                    return []
+
+    flag = True
     return instrucaoEmPartes
 
 def main():
