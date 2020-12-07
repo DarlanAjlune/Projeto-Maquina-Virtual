@@ -3,3 +3,8 @@ C B A commandE
 A B C commandE
 I J B commandSUB
 -45 D G commandSUMC
+C B A commandE
+-45 E D commandSUBC
+A B C commandE
+I J B commandSUB
+-45 D G commandSUMC
